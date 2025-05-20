@@ -96,3 +96,11 @@ textarea {
   color: #555;
   line-height: 1.4;
 }
+
+select {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  border-radius: 8px;
+}

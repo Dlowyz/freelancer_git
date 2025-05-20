@@ -374,6 +374,7 @@ app.get('/posts', async (req, res) => {
         u.first_name,
         u.last_name,
         p.user_id,
+        p.category,
         u.avatar
       FROM Posts p
       JOIN Users u ON p.user_id = u.id

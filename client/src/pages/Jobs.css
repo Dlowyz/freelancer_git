@@ -245,3 +245,36 @@
 .clear-search-btn:hover {
   color: #333;
 }
+
+.job-category {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #5865f2;
+  margin: 6px 0;
+}
+
+.job-filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.category-filter select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.job-category {
+  color: #5865f2;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin: 6px 0 0;
+}
