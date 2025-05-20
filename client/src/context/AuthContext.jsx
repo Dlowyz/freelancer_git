@@ -19,27 +19,41 @@ export function AuthProvider({ children }) {
   }, []);
 
   const fetchUserInfo = async (token) => {
-    try {
-      const res = await fetch('http://localhost:5000/auth/me', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  try {
+    const res = await fetch('http://localhost:5000/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      if (!res.ok) {
-        throw new Error('Unauthorized');
-      }
-
-      const userData = await res.json();
-      setUser(userData);
-    } catch (error) {
-      console.error('AuthContext fetch error:', error);
-      localStorage.removeItem('token');
-      setUser(null);
-    } finally {
-      setLoading(false);
+    if (!res.ok) {
+      throw new Error('Unauthorized');
     }
-  };
+
+    const userData = await res.json();
+
+    // ✅ Destructure safely
+    setUser({
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone,
+      dob: userData.dob,
+      role: userData.role,
+      avatar: userData.avatar,
+      bio: userData.bio,
+      company: userData.company || null, // <- 🟢 this makes sure it's always available
+    });
+
+  } catch (error) {
+    console.error('AuthContext fetch error:', error);
+    localStorage.removeItem('token');
+    setUser(null);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // 🔥 Add refreshUser function (public)
   const refreshUser = async () => {

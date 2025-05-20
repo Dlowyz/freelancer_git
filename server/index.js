@@ -191,7 +191,8 @@ function authenticateToken(req, res, next) {
 
 
 app.post('/register', async (req, res) => {
-  const { firstName, lastName, email, password, phone, dob, role } = req.body;
+  const { firstName, lastName, email, password, phone, dob, role, company } = req.body;
+
 
   if (!firstName || !lastName || !email || !password || !phone || !dob || !role) {
     return res.status(400).json({ error: 'All fields are required' });
@@ -210,9 +211,10 @@ app.post('/register', async (req, res) => {
     const defaultAvatar = `https://placehold.co/150/${randomColor}/ffffff?text=${firstName[0]}${lastName[0]}`;
 
     await db.query(
-      'INSERT INTO users (first_name, last_name, email, password, phone, dob, role, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [firstName, lastName, email, hashedPassword, phone, dob, role, defaultAvatar]
-    );
+  'INSERT INTO users (first_name, last_name, email, password, phone, dob, role, company, avatar) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+  [firstName, lastName, email, hashedPassword, phone, dob, role, company, defaultAvatar]
+  );
+
 
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
@@ -277,14 +279,16 @@ app.get('/auth/me', authenticateToken, async (req, res) => {
     role: user.role,
     avatar: user.avatar,
     bio: user.bio,
-    dob: user.dob
+    dob: user.dob,
+    company: user.company
   });
 });
 
 
 app.post('/update-profile', authenticateToken, async (req, res) => {
   const userId = req.user.id;
-  const { firstName, lastName, email, phone, bio, avatar, dob, currentPassword, newPassword } = req.body;
+  const { firstName, lastName, email, phone, bio, avatar, dob, company, currentPassword, newPassword } = req.body;
+
 
   try {
     if (newPassword) {
@@ -299,14 +303,16 @@ app.post('/update-profile', authenticateToken, async (req, res) => {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       await db.query(
-        'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, bio = ?, avatar = ?, dob = ?, password = ? WHERE id = ?',
-        [firstName, lastName, email, phone, bio, avatar, dob, hashedPassword, userId]
-      );
+  'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, bio = ?, avatar = ?, dob = ?, company = ?, password = ? WHERE id = ?',
+  [firstName, lastName, email, phone, bio, avatar, dob, company, hashedPassword, userId]
+  );
+
     } else {
       await db.query(
-        'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, bio = ?, avatar = ?, dob = ? WHERE id = ?',
-        [firstName, lastName, email, phone, bio, avatar, dob, userId]
-      );
+  'UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, bio = ?, avatar = ?, dob = ?, company = ? WHERE id = ?',
+  [firstName, lastName, email, phone, bio, avatar, dob, company, userId]
+  );
+
     }
 
     res.json({ message: 'Profile updated successfully!' });
@@ -331,15 +337,15 @@ app.get('/profile/:username', async (req, res) => {
   const user = rows[0];
 
   res.json({
-    id: user.id,
-    name: `${user.first_name} ${user.last_name}`,
-    email: user.email,
-    phone: user.phone,
-    role: user.role,
-    bio: user.bio || 'No bio yet',
-    avatar: user.avatar || 'https://placehold.co/150/png',
-    dob: user.dob ? new Date(user.dob).toLocaleDateString() : 'Not set',
-    // Later: portfolio, skills, posts, etc.
+  id: user.id,
+  name: `${user.first_name} ${user.last_name}`,
+  email: user.email,
+  phone: user.phone,
+  role: user.role,
+  bio: user.bio || 'No bio yet',
+  avatar: user.avatar || 'https://placehold.co/150/png',
+  dob: user.dob ? new Date(user.dob).toLocaleDateString() : 'Not set',
+  company: user.company || '' 
   });
 });
 

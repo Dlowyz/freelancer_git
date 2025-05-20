@@ -19,9 +19,9 @@ function Register() {
   const [dobError, setDobError] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [company, setCompany] = useState('');
   const [registerError, setRegisterError] = useState('');
 
-  // Validation helpers
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isStrongPassword = (password) => password.length >= 8 && /\d/.test(password);
   const isValidPhoneNumber = (code, number) =>
@@ -52,10 +52,12 @@ function Register() {
     confirmPassword === password &&
     isValidPhoneNumber(phoneCode, phoneNumber) &&
     dob &&
-    isAtLeast18YearsOld(dob);
+    isAtLeast18YearsOld(dob) &&
+    (role !== 'client' || company.trim());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const userData = {
       firstName,
       lastName,
@@ -64,6 +66,7 @@ function Register() {
       phone: `${phoneCode}${phoneNumber}`,
       dob,
       role,
+      company: role === 'client' ? company : null
     };
 
     try {
@@ -89,7 +92,6 @@ function Register() {
         ))}
       </div>
 
-        
       <div className="register-container">
         <h1>Register</h1>
         <form onSubmit={handleSubmit} className="register-form">
@@ -114,6 +116,19 @@ function Register() {
               onChange={(e) => setLastName(e.target.value)}
             />
           </label>
+
+          {role === 'client' && (
+            <label>
+              Company Name
+              <input
+                type="text"
+                placeholder="Company Inc."
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                required
+              />
+            </label>
+          )}
 
           <label>
             Email

@@ -38,28 +38,30 @@ function Profile() {
         
         {/* Profile Section */}
         <div className="profile-section">
-          <img
-            src={
-              user.avatar
-                ? user.avatar.startsWith('http')
-                  ? user.avatar
-                  : `http://localhost:5000/${user.avatar}`
-                : 'https://placehold.co/150/png'
-            }
-            alt="User Avatar"
-            className="avatar"
-          />
-          <h2>{user.name}</h2>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Phone:</strong> {user.phone || 'Not set'}</p>
-          <p><strong>Date of Birth:</strong> {user.dob ? new Date(user.dob).toLocaleDateString() : 'Not set'}</p>
-          <p><strong>Bio:</strong> {user.bio || 'No bio yet'}</p>
+  <img
+    src={
+      user.avatar
+        ? user.avatar.startsWith('http')
+          ? user.avatar
+          : `http://localhost:5000/${user.avatar}`
+        : 'https://placehold.co/150/png'
+    }
+    alt="User Avatar"
+    className="avatar"
+  />
+  <h2>{user.name}</h2>
+  {user.company && <p><strong>Company:</strong> {user.company}</p>}
+  <p><strong>Email:</strong> {user.email}</p>
+  <p><strong>Phone:</strong> {user.phone || 'Not set'}</p>
+  <p><strong>Date of Birth:</strong> {user.dob ? new Date(user.dob).toLocaleDateString() : 'Not set'}</p>
+  <p><strong>Bio:</strong> {user.bio || 'No bio yet'}</p>
 
-          <div className="profile-actions">
-            <Link to="/edit-profile" className="profile-action-btn edit-btn">Edit Profile</Link>
-            <Link to="/create-post" className="profile-action-btn create-btn">Create Post</Link>
-          </div>
-        </div>
+  <div className="profile-actions">
+    <Link to="/edit-profile" className="profile-action-btn edit-btn">Edit Profile</Link>
+    <Link to="/create-post" className="profile-action-btn create-btn">Create Post</Link>
+  </div>
+</div>
+
 
         {/* Posts Section */}
         <div className="posts-section">
